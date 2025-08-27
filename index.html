@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment - Syed Aman Yusuf</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            position: relative;
+        }
+        
+        .header {
+            background: #2575fc;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        
+        .wave-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 40%;
+            animation: waveAnimation 8s infinite linear;
+            z-index: 1;
+            opacity: 0.8;
+        }
+        
+        .wave:nth-child(2) {
+            animation-delay: -4s;
+            opacity: 0.5;
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+        }
+        
+        .wave:nth-child(3) {
+            animation-delay: -2s;
+            opacity: 0.3;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
+            color: #2575fc;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 42px;
+            font-weight: bold;
+            border: 4px solid white;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .avatar-pulse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+            z-index: 0;
+        }
+        
+        .name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .upi-id {
+            font-size: 14px;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 500;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .payment-form {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #2575fc;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+        
+        .amount-input {
+            position: relative;
+        }
+        
+        .amount-input::before {
+            content: "₹";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 16px;
+            z-index: 1;
+        }
+        
+        #amount {
+            padding-left: 30px;
+        }
+        
+        .btn {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.3);
+        }
+        
+        .btn:hover {
+            background: #1c64e0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 117, 252, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .upi-logo {
+            text-align: center;
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .upi-logo img {
+            width: 100px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer {
+            background: #f5f7fa;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #eaeaea;
+            line-height: 1.5;
+        }
+        
+        .powered-by {
+            font-weight: 600;
+            color: #2575fc;
+        }
+        
+        .wallet-by {
+            font-weight: 600;
+            color: #6a11cb;
+        }
+        
+        .author {
+            margin-top: 5px;
+            font-size: 10px;
+        }
+        
+        .author a {
+            color: #2575fc;
+            text-decoration: none;
+        }
+        
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .notification {
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            animation: progressBar 5s linear forwards;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        }
+        
+        .notification-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .notification-close:hover {
+            opacity: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            70% {
+                transform: scale(1.05);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes waveAnimation {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) translateY(-10%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-50%) translateY(0) rotate(360deg);
+            }
+        }
+        
+        @keyframes progressBar {
+            0% { width: 100%; }
+            100% { width: 0%; }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .avatar-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 36px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .payment-form {
+                padding: 20px;
+            }
+            
+            input {
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 14px;
+            }
+            
+            .upi-logo img {
+                width: 90px;
+            }
+            
+            .notification-container {
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+            
+            .notification {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="avatar-container">
+                <div class="wave-background">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+                <div class="avatar">S</div>
+                <div class="avatar-pulse"></div>
+            </div>
+            <div class="name">Syed Aman Yusuf</div>
+            <div class="upi-id">syedmmd-3@okicici</div>
+        </div>
+        
+        <div class="payment-form">
+            <div class="form-group">
+                <label for="amount">Amount (₹)</label>
+                <div class="amount-input">
+                    <input type="number" id="amount" placeholder="Enter amount" min="1" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="note">Note (Optional)</label>
+                <input type="text" id="note" placeholder="Add a note">
+            </div>
+            
+            <button class="btn" id="pay-btn">
+                <i class="fas fa-paper-plane"></i> Pay Now
+            </button>
+            
+            <div class="upi-logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuEeJLwRRNUN4v14EOyNMTlsbdylwu9V2K-A&s" alt="UPI Logo">
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div>Powerd by <span class="powered-by">MERIZIX PAY</span></div>
+            <div>Wallet by <span class="wallet-by">IN WALLET</span></div>
+            <div class="author" style="font-size:12px; font-weight:bold;">Made By <a href="https://syed-aman-yusuf.netlify.app/" target="_blank">S.A.Y</a></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const payBtn = document.getElementById('pay-btn');
+            const amountInput = document.getElementById('amount');
+            const noteInput = document.getElementById('note');
+            const notificationContainer = document.getElementById('notificationContainer');
+            
+            // Show notification function
+            function showNotification(type, title, message, duration = 5000) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                
+                let icon = 'fa-info-circle';
+                if (type === 'success') icon = 'fa-check-circle';
+                if (type === 'warning') icon = 'fa-exclamation-triangle';
+                if (type === 'error') icon = 'fa-exclamation-circle';
+                
+                notification.innerHTML = `
+                    <i class="fas ${icon} notification-icon"></i>
+                    <div class="notification-content">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                `;
+                
+                notificationContainer.appendChild(notification);
+                
+                // Show notification
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10);
+                
+                // Close button event
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    closeNotification(notification);
+                });
+                
+                // Auto close after duration
+                if (duration > 0) {
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            closeNotification(notification);
+                        }
+                    }, duration);
+                }
+                
+                return notification;
+            }
+            
+            // Close notification function
+            function closeNotification(notification) {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notificationContainer.removeChild(notification);
+                    }
+                }, 400);
+            }
+            
+            // Function to generate UPI payment link
+            function generateUPILink() {
+                const amount = amountInput.value;
+                
+                if (!amount || amount <= 0) {
+                    showNotification('error', 'Error', 'Please enter a valid amount');
+                    amountInput.focus();
+                    return null;
+                }
+                
+                const note = encodeURIComponent(noteInput.value || 'Payment');
+                const upiId = 'syedmmd-3@okicici';
+                const payeeName = encodeURIComponent('Syed Aman Yusuf');
+                
+                // Standard UPI link format that works with any UPI app
+                return `upi://pay?pa=${upiId}&pn=${payeeName}&am=${amount}&cu=INR&tn=${note}`;
+            }
+            
+            // Handle Pay Now button click
+            payBtn.addEventListener('click', function() {
+                const upiLink = generateUPILink();
+                if (upiLink) {
+                    // Show processing notification
+                    showNotification('info', 'Processing', 'Opening your UPI app...', 3000);
+                    
+                    // Redirect to UPI payment link after a brief delay
+                    setTimeout(() => {
+                        window.location.href = upiLink;
+                        
+                        // Fallback: If the app doesn't open, show message after a delay
+                        setTimeout(() => {
+                            if (!document.hidden) {
+                                showNotification('warning', 'Redirect Failed', 
+                                    'Could not open UPI app. Please make sure you have a UPI app installed.', 5000);
+                            }
+                        }, 2000);
+                    }, 500);
+                }
+            });
+            
+            // Allow only numbers and decimal point in amount field
+            amountInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+            });
+            
+            // Focus on amount input when page loads
+            amountInput.focus();
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('info', 'Welcome', 'Enter amount and click Pay to make a payment', 4000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
